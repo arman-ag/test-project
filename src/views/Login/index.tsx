@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { api } from '../../services/api.service';
+import { LoginReq } from './types';
 
 const Login: FC = () => {
   const [formValues, setFormValues] = useState({});
@@ -31,8 +32,9 @@ const Login: FC = () => {
 
   const handleSubmit = (event: React.FormEvent<EventTarget>) => {
     event.preventDefault();
+
     api
-      .post('https://reqres.in/api/login', formValues)
+      .post<LoginReq>('https://reqres.in/api/login', formValues)
       .then((res) => {
         toast('login sucsesfully'),
           localStorage.setItem('user', res.data.token),
@@ -51,7 +53,9 @@ const Login: FC = () => {
       </Box>
       <Grid
         container
-        style={{ height: '100Vh' }}
+        css={css`
+          height: 100vh;
+        `}
         display={'flex'}
         justifyContent={'center'}
         alignItems={'center'}>
@@ -116,7 +120,6 @@ const Login: FC = () => {
           </Card>
         </Grid>
       </Grid>
-
       <ToastContainer />
     </>
   );

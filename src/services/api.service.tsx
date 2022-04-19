@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const get = (url :string) => {
+const get = (url: string) => {
   return axios({
     method: 'get',
     url
   });
 };
-const post= <T extends string, U extends object>(url: T, data: U) => {
+const post = <T,>(url: string, data: T) => {
   return axios({
     method: 'post',
     url,
