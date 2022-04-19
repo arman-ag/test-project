@@ -10,7 +10,7 @@ import { userType } from './types';
 const UserInfo: FC = () => {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
-
+  console.log(page);
   const [choseUser, setChoseUser] = useState<userType>();
 
   const handleOpen = (user: userType) => {
@@ -18,64 +18,65 @@ const UserInfo: FC = () => {
   };
   const handleClose = () => setOpen(false);
 
-  const getData = async (page: number) => {
-    return await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res);
-  };
-  const { isLoading, isError, error, data, status, isFetching, isPreviousData } = useQuery(
+  // const getData = async (page: number) => {
+  //   return await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res);
+  // };
+  // const { isLoading, isError, error, data, status, isFetching, isPreviousData } = useQuery(
+  //   ['projects', page],  `
+  //   () => getData(page),
+  //   {
+  //     keepPreviousData: true
+  //   }
+  // );
+
+  const getData = useQuery(
     ['projects', page],
-    () => getData(page),
+    async () =>
+      await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res.data.data),
     {
       keepPreviousData: true
     }
   );
 
-  const showStatus = () => {
-    switch (status) {
-      case 'error':
-        return (
-          <div>
-            <h2>Error to fetch data</h2>
-          </div>
-        );
-      case 'loading':
-        return <h2>data fetching . please wait</h2>;
-      case 'success':
-        return (
-          <>
-            <Container>
-              <Grid container spacing={4} justifyContent="center" alignItems="center">
-                {data?.data.data.map((user: userType) => (
-                  <Grid
-                    onClick={() => {
-                      handleOpen(user);
-                    }}
-                    key={user.id}
-                    item
-                    md={3}
-                    xs={12}>
-                    <UserCard user={user} />
-                  </Grid>
-                ))}
-              </Grid>
-            </Container>
-            <Modal open={open} onClose={handleClose}>
-              <ModalCard user={choseUser} />
-            </Modal>
-          </>
-        );
-    }
-  };
   return (
     <>
-      {showStatus()}
+      {getData.isLoading ? (
+        <h2>data fetching . please wait</h2>
+      ) : getData.isError ? (
+        <div>
+          <h2>Error to fetch data</h2>
+        </div>
+      ) : (
+        <>
+          <Container>
+            <Grid container spacing={4} justifyContent="center" alignItems="center">
+              {getData?.data.map((user: userType) => (
+                <Grid
+                  onClick={() => {
+                    handleOpen(user);
+                  }}
+                  key={user.id}
+                  item
+                  md={3}
+                  xs={12}>
+                  <UserCard user={user} />
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+          <Modal open={open} onClose={handleClose}>
+            <ModalCard user={choseUser} />
+          </Modal>
+        </>
+      )}
       <Box mt={10} display={'flex'} justifyContent={'center'} alignItems={'center'}>
         <Button
           onClick={() => {
-            if (!isPreviousData) {
+            if (!getData.isPreviousData) {
               setPage((old) => ++old);
             }
           }}
-          disabled={isPreviousData || page >= 2}>
+          disabled={getData.isPreviousData || page >= 2}>
           Next page
         </Button>
         <Typography variant={'h6'} style={{ margin: '0 40px' }}>
@@ -84,7 +85,8 @@ const UserInfo: FC = () => {
         <Button
           onClick={() => {
             setPage((pre: number) => Math.max(--pre, 1));
-          }}>
+          }}
+          disabled={page === 1}>
           pervious page
         </Button>
       </Box>
