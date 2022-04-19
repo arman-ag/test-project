@@ -1,5 +1,6 @@
-import { AppBar, Button, Grid, Paper, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, Grid, Toolbar, Typography } from '@mui/material';
 import * as React from 'react';
+
 const Header = () => {
   const [result, setResult] = React.useState([]);
 
@@ -17,8 +18,6 @@ const Header = () => {
     window.location.href = '/';
   };
 
-  // const classes = useStyles();
-
   return (
     <header>
       <AppBar position="static" style={{ backgroundColor: '#4b6584', marginBottom: 50 }}>
@@ -34,8 +33,8 @@ const Header = () => {
               </Button>
             </Grid>
             <Grid item md={10} xs={8}>
-              <Paper>
-                {/* <Autocomplete
+              {/* <Paper>
+                <Autocomplete
                   freeSolo
                   disableClearable
                   options={result?.map((option) => option.name)}
@@ -48,14 +47,14 @@ const Header = () => {
                         type: 'search',
                         startAdornment: (
                           <InputAdornment position="start">
-                            <SearchIcon />
+                            <FiSearch />
                           </InputAdornment>
                         )
                       }}
                     />
                   )}
-                /> */}
-              </Paper>
+                /> 
+               </Paper> */}
             </Grid>
           </Grid>
         </Toolbar>
