@@ -48,9 +48,6 @@ const Login: FC = () => {
   };
   return (
     <>
-      <Box mt={10} display={'flex'} justifyContent={'center'}>
-        <Typography variant={'h4'}>For see user list please login first </Typography>
-      </Box>
       <Grid
         container
         css={css`
@@ -60,7 +57,10 @@ const Login: FC = () => {
         justifyContent={'center'}
         alignItems={'center'}>
         <Grid item xs={10} md={5}>
-          <Card>
+          <Card
+            css={css`
+              background-color: #f5f6fa;
+            `}>
             <CardContent>
               <form onSubmit={(event) => handleSubmit(event)}>
                 <Box
@@ -71,6 +71,13 @@ const Login: FC = () => {
                   display={'flex'}
                   flexDirection={'column'}
                   justifyContent={'space-around'}>
+                  <Typography
+                    css={css`
+                      margin: 0 10px;
+                    `}>
+                    {' '}
+                    For see user list please login first{' '}
+                  </Typography>
                   <TextField
                     label="Email"
                     variant="outlined"
@@ -100,7 +107,11 @@ const Login: FC = () => {
                   </Button>
                 </Box>
               </form>
-              <Accordion style={{ boxShadow: 'none' }}>
+              <Accordion
+                css={css`
+                  background-color: inherit;
+                `}
+                style={{ boxShadow: 'none' }}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
