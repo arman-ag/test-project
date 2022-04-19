@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PasswordIcon from '@mui/icons-material/Password';
@@ -58,7 +60,10 @@ const Login: FC = () => {
             <CardContent>
               <form onSubmit={(event) => handleSubmit(event)}>
                 <Box
-                  style={{ height: '40vh', padding: 50 }}
+                  css={css`
+                    height: 40vh;
+                    padding: 50px;
+                  `}
                   display={'flex'}
                   flexDirection={'column'}
                   justifyContent={'space-around'}>
