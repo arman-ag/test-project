@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import { api } from 'services/api.service';
 import ModalCard from '../../components/modal/ModalCard';
 import UserCard from '../../components/UserCard';
-import { getUserType, userType } from './types';
+import { userType } from './types';
 
 const UserInfo: FC = () => {
   const [page, setPage] = useState(1);
@@ -20,9 +20,7 @@ const UserInfo: FC = () => {
   const getData = useQuery(
     ['projects', page],
     async () =>
-      await api
-        .get<getUserType>(`https://reqres.in/api/users?page=${page}`)
-        .then((res) => res.data.data),
+      await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res.data.data),
     {
       keepPreviousData: true
     }
