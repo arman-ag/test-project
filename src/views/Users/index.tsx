@@ -1,6 +1,5 @@
 import { Button, Container, Grid, Modal, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { LayoutPrivate } from 'components/Layout';
 import { FC, useState } from 'react';
 import { useQuery } from 'react-query';
 import { api } from 'services/api.service';
@@ -20,8 +19,7 @@ const UserInfo: FC = () => {
   const handleClose = () => setOpen(false);
 
   const getData = async (page: number) => {
-    const response = await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res);
-    return response;
+    return await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res);
   };
   const { isLoading, isError, error, data, status, isFetching, isPreviousData } = useQuery(
     ['projects', page],
@@ -69,29 +67,27 @@ const UserInfo: FC = () => {
   };
   return (
     <>
-      <LayoutPrivate>
-        {showStatus()}
-        <Box mt={10} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-          <Button
-            onClick={() => {
-              if (!isPreviousData) {
-                setPage((old) => ++old);
-              }
-            }}
-            disabled={isPreviousData || page >= 2}>
-            Next page
-          </Button>
-          <Typography variant={'h6'} style={{ margin: '0 40px' }}>
-            {page}
-          </Typography>
-          <Button
-            onClick={() => {
-              setPage((pre: number) => Math.max(--pre, 1));
-            }}>
-            pervious page
-          </Button>
-        </Box>
-      </LayoutPrivate>
+      {showStatus()}
+      <Box mt={10} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+        <Button
+          onClick={() => {
+            if (!isPreviousData) {
+              setPage((old) => ++old);
+            }
+          }}
+          disabled={isPreviousData || page >= 2}>
+          Next page
+        </Button>
+        <Typography variant={'h6'} style={{ margin: '0 40px' }}>
+          {page}
+        </Typography>
+        <Button
+          onClick={() => {
+            setPage((pre: number) => Math.max(--pre, 1));
+          }}>
+          pervious page
+        </Button>
+      </Box>
     </>
   );
 };

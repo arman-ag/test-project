@@ -1,4 +1,4 @@
-import { LayoutPrivate } from 'components/Layout';
+import { PrivateLayout, PublicLayout } from 'components/Layout';
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
@@ -10,13 +10,11 @@ const queryClient = new QueryClient();
 const App: React.FC = () => {
   const AuthCheck = () => {
     return localStorage.getItem('user') ? (
-      <LayoutPrivate>
+      <PrivateLayout>
         <Outlet />
-      </LayoutPrivate>
+      </PrivateLayout>
     ) : (
-      <LayoutPrivate>
-        <Navigate to="/" />;
-      </LayoutPrivate>
+      <Navigate to="/" />
     );
   };
   return (
@@ -24,7 +22,14 @@ const App: React.FC = () => {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <PublicLayout>
+                  <Login />
+                </PublicLayout>
+              }
+            />
             <Route element={<AuthCheck />}>
               <Route path="/user" element={<Users />} />
             </Route>
