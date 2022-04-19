@@ -5,12 +5,11 @@ import { useQuery } from 'react-query';
 import { api } from 'services/api.service';
 import ModalCard from '../../components/modal/ModalCard';
 import UserCard from '../../components/UserCard';
-import { userType } from './types';
+import { getUserType, userType } from './types';
 
 const UserInfo: FC = () => {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
-  console.log(page);
   const [choseUser, setChoseUser] = useState<userType>();
 
   const handleOpen = (user: userType) => {
@@ -18,21 +17,12 @@ const UserInfo: FC = () => {
   };
   const handleClose = () => setOpen(false);
 
-  // const getData = async (page: number) => {
-  //   return await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res);
-  // };
-  // const { isLoading, isError, error, data, status, isFetching, isPreviousData } = useQuery(
-  //   ['projects', page],  `
-  //   () => getData(page),
-  //   {
-  //     keepPreviousData: true
-  //   }
-  // );
-
   const getData = useQuery(
     ['projects', page],
     async () =>
-      await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res.data.data),
+      await api
+        .get<getUserType>(`https://reqres.in/api/users?page=${page}`)
+        .then((res) => res.data.data),
     {
       keepPreviousData: true
     }
