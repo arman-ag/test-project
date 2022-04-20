@@ -13,14 +13,14 @@ export interface getUserType {
   data: Datum[];
   support: Support;
 }
-export interface Datum {
+interface Datum {
   id: number;
   email: string;
   first_name: string;
   last_name: string;
   avatar: string;
 }
-export interface Support {
+interface Support {
   url: string;
   text: string;
 }

@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import { api } from 'services/api.service';
 import ModalCard from '../../components/modal/ModalCard';
 import UserCard from '../../components/UserCard';
-import { userType } from './types';
+import { getUserType, userType } from './types';
 
 const UserInfo: FC = () => {
   const [page, setPage] = useState(1);
@@ -20,12 +20,14 @@ const UserInfo: FC = () => {
   const getData = useQuery(
     ['projects', page],
     async () =>
-      await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res.data.data),
+      await api
+        .get<getUserType>(`https://reqres.in/api/users?page=${page}`)
+        .then((res) => res.data.data),
     {
       keepPreviousData: true
     }
   );
-
+  console.log(getData);
   return (
     <>
       {getData.isLoading ? (
@@ -38,7 +40,7 @@ const UserInfo: FC = () => {
         <>
           <Container>
             <Grid container spacing={4} justifyContent="center" alignItems="center">
-              {getData?.data.map((user: userType) => (
+              {getData?.data?.map((user: userType) => (
                 <Grid
                   onClick={() => {
                     handleOpen(user);

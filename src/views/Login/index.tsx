@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { api } from '../../services/api.service';
-import { LoginReq } from './types';
+import { LoginReq, LoginRes } from './types';
 
 const Login: FC = () => {
   const [formValues, setFormValues] = useState({});
@@ -34,7 +34,7 @@ const Login: FC = () => {
     event.preventDefault();
 
     api
-      .post<LoginReq>('https://reqres.in/api/login', formValues)
+      .post<LoginReq, LoginRes>('https://reqres.in/api/login', formValues)
       .then((res) => {
         toast('login sucsesfully'),
           localStorage.setItem('user', res.data.token),
