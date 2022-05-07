@@ -18,8 +18,7 @@ import {
 import { Box } from '@mui/system';
 import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { api } from '../../services/api.service';
 import { LoginReq, LoginRes } from './types';
 
@@ -131,7 +130,6 @@ const Login: FC = () => {
           </Card>
         </Grid>
       </Grid>
-      <ToastContainer />
     </>
   );
 };
