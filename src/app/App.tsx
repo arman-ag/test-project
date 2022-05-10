@@ -7,6 +7,7 @@ import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Login from 'views/Login';
+import SingleUSer from 'views/SingleUser';
 import Users from 'views/Users';
 const queryClient = new QueryClient();
 
@@ -36,6 +37,10 @@ const App: React.FC = () => {
             />
             <Route element={<AuthCheck />}>
               <Route path="/user" element={<Users />} />
+              <Route path="/single-user" element={<SingleUSer />}>
+                <Route path=":id" element={<SingleUSer />} />
+                <Route />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>

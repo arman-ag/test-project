@@ -13,7 +13,15 @@ const post = <T, D>(url: string, data: T) => {
     data
   });
 };
+const put = <T, D>(url: string, data: T) => {
+  return axios.request<T, D>({
+    method: 'put',
+    url,
+    data
+  });
+};
 export const api = {
   get,
-  post
+  post,
+  put
 };
