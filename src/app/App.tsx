@@ -29,7 +29,7 @@ const App: React.FC = () => {
             <Route
               element={() => {
                 return authenticate ? (
-                  <Route path="/user" element={<Users />} />
+                  <Navigate path="/user" element={<Users />} />
                 ) : (
                   <Navigate to="/" />
                 );
