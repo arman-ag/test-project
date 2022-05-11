@@ -4,7 +4,7 @@ export interface useMutationType {
 }
 export interface DataType {
   name: string;
-  job: string;
+  job?: string;
 }
 export interface putResType {
   name: string;

@@ -109,8 +109,8 @@ const Login: FC = () => {
               <Accordion
                 css={css`
                   background-color: inherit;
-                `}
-                style={{ boxShadow: 'none' }}>
+                  box-shadow: none;
+                `}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
