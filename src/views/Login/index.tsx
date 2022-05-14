@@ -17,8 +17,9 @@ import {
   Typography
 } from '@mui/material';
 import { Box } from '@mui/system';
+import { useIsAuth } from 'hooks/useAuth';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { api } from '../../services/api.service';
 import { LoginReq, LoginRes } from './types';
@@ -26,6 +27,7 @@ import { LoginReq, LoginRes } from './types';
 const Login = () => {
   const [formValues, setFormValues] = useState({});
   const [buttonLoading, setButtonLoading] = useState(false);
+  const setter = useIsAuth();
   const navigate = useNavigate();
   const handleInputChange = (value: { email?: string; password?: string }) => {
     setFormValues({ ...formValues, ...value });
@@ -39,11 +41,10 @@ const Login = () => {
       .post<LoginReq, LoginRes>('https://reqres.in/api/login', formValues)
       .then((res) => {
         setButtonLoading(false);
-        toast('login sucsesfully', { autoClose: 2000 }),
-          localStorage.setItem('user', res.data.token);
-        setTimeout(() => {
-          navigate('/user');
-        }, 2000);
+        localStorage.setItem('user', res.data.token);
+        setter(true);
+        toast('login sucsesfully', { autoClose: 1000 });
+        navigate('/user');
       })
       .catch((err) => {
         toast(err.response.data.error, { autoClose: 2000 });

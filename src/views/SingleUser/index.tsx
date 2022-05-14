@@ -28,6 +28,7 @@ const SingleUSer = () => {
   const editUserInfo = () => {
     useMutationUsers(2, { name: value! });
   };
+  //  const matches = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <>
       {data?.isLoading ? (
@@ -37,7 +38,7 @@ const SingleUSer = () => {
           <h2>Error to fetch data</h2>
         </div>
       ) : (
-        <Card>
+        <Card sx={{ maxWidth: '50%', margin: 'auto' }}>
           <CardMedia component="img" alt="user avatart" image={data?.data?.avatar} />
           <CardContent>
             <Box
@@ -45,8 +46,8 @@ const SingleUSer = () => {
               justifyContent={'center'}
               flexDirection="column"
               alignItems="center">
-              <Typography variant="h5">{`${data?.data?.first_name}  ${data?.data?.last_name}`}</Typography>
-              <Typography variant="h5">{data.data?.email}</Typography>
+              <Typography variant="h6">{`${data?.data?.first_name}  ${data?.data?.last_name}`}</Typography>
+              <Typography variant="h6">{data.data?.email}</Typography>
             </Box>
             <Accordion
               css={css`
