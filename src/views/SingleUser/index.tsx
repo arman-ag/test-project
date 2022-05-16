@@ -27,12 +27,22 @@ const CustomTextfield = styled(TextField)({
 const SingleUSer = () => {
   const [value, setValue] = useState<string>();
 
-  const params = useParams();
-  const data = useGetSingleUser('fetchSingleUser', params?.id);
+  const { id } = useParams();
+  const data = useGetSingleUser('fetchSingleUser', id);
 
-  const editUser = useMutation((data: { name: string }) => {
-    return api.put<DataType, putResType>(`https://reqres.in/api/users/${params?.id}`, data);
-  });
+  const editUser = useMutation(
+    (data: { name: string }) => {
+      return api.put<DataType, putResType>(`https://reqres.in/api/users/${id}`, data);
+    },
+    {
+      onSuccess: (data) => {
+        toast(`user ${data.name} edited`);
+      },
+      onError: () => {
+        toast('something went wrong');
+      }
+    }
+  );
 
   // useEffect(() => {
   //   editUser?.isLoading
@@ -77,12 +87,12 @@ const SingleUSer = () => {
 
                 <Button
                   variant="contained"
+                  disabled={!value}
                   css={css`
                     margin-top: 20px;
                   `}
                   onClick={() => {
                     editUser.mutate({ name: value! });
-                    toast('user edited');
                   }}>
                   edit
                 </Button>
