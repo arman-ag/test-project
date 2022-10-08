@@ -1,3 +1,6 @@
+/* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import { Container } from '@mui/material';
 import React from 'react';
 import Footer from './Footer';
@@ -18,7 +21,12 @@ export const PublicLayout = ({ children }: layout) => {
   return (
     <>
       <Container>
-        <main>{children}</main>
+        <main
+          css={css`
+            min-height: 100vh;
+          `}>
+          {children}
+        </main>
       </Container>
       <Footer />
     </>

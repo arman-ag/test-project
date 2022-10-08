@@ -1,31 +1,18 @@
-import { Button, Container, Grid, Modal, Typography } from '@mui/material';
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
+import { Button, Container, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { FC, useState } from 'react';
-import { useQuery } from 'react-query';
-import { api } from 'services/api.service';
-import ModalCard from '../../components/modal/ModalCard';
+import useFetch from 'hooks/useFetch';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import UserCard from '../../components/UserCard';
 import { userType } from './types';
 
-const UserInfo: FC = () => {
+const UserInfo = () => {
   const [page, setPage] = useState(1);
-  const [open, setOpen] = useState(false);
   const [choseUser, setChoseUser] = useState<userType>();
 
-  const handleOpen = (user: userType) => {
-    setOpen(true), setChoseUser(user);
-  };
-  const handleClose = () => setOpen(false);
-
-  const getData = useQuery(
-    ['projects', page],
-    async () =>
-      await api.get(`https://reqres.in/api/users?page=${page}`).then((res) => res.data.data),
-    {
-      keepPreviousData: true
-    }
-  );
-
+  const getData = useFetch('users', page);
   return (
     <>
       {getData.isLoading ? (
@@ -38,23 +25,19 @@ const UserInfo: FC = () => {
         <>
           <Container>
             <Grid container spacing={4} justifyContent="center" alignItems="center">
-              {getData?.data.map((user: userType) => (
-                <Grid
-                  onClick={() => {
-                    handleOpen(user);
-                  }}
-                  key={user.id}
-                  item
-                  md={3}
-                  xs={12}>
-                  <UserCard user={user} />
+              {getData?.data?.map((user: userType) => (
+                <Grid key={user.id} item md={3} xs={12}>
+                  <Link
+                    css={css`
+                      text-decoration: none;
+                    `}
+                    to={`/single-user/${user.id}`}>
+                    <UserCard user={user} />
+                  </Link>
                 </Grid>
               ))}
             </Grid>
           </Container>
-          <Modal open={open} onClose={handleClose}>
-            <ModalCard user={choseUser} />
-          </Modal>
         </>
       )}
       <Box mt={10} display={'flex'} justifyContent={'center'} alignItems={'center'}>

@@ -10,21 +10,24 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Grid,
   InputAdornment,
   TextField,
   Typography
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { FC, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useIsAuth } from 'hooks/useAuth';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { api } from '../../services/api.service';
-import { LoginReq } from './types';
+import { LoginReq, LoginRes } from './types';
 
-const Login: FC = () => {
+const Login = () => {
   const [formValues, setFormValues] = useState({});
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const setter = useIsAuth();
   const navigate = useNavigate();
   const handleInputChange = (value: { email?: string; password?: string }) => {
     setFormValues({ ...formValues, ...value });
@@ -32,18 +35,22 @@ const Login: FC = () => {
 
   const handleSubmit = (event: React.FormEvent<EventTarget>) => {
     event.preventDefault();
+    setButtonLoading(true);
 
     api
-      .post<LoginReq>('https://reqres.in/api/login', formValues)
+      .post<LoginReq, LoginRes>('https://reqres.in/api/login', formValues)
       .then((res) => {
-        toast('login sucsesfully'),
-          localStorage.setItem('user', res.data.token),
-          setTimeout(() => {
-            navigate('/user');
-          }, 4000);
+        setButtonLoading(false);
+        localStorage.setItem('user', res.data.token);
+        setter(true);
+        toast('login sucsesfully', { autoClose: 1000 });
+        navigate('/user');
       })
       .catch((err) => {
-        toast(err.response.data.error);
+        toast(err.response.data.error, { autoClose: 2000 });
+        setTimeout(() => {
+          setButtonLoading(false);
+        }, 2000);
       });
   };
   return (
@@ -75,7 +82,6 @@ const Login: FC = () => {
                     css={css`
                       margin: 0 10px;
                     `}>
-                    {' '}
                     For see user list please login first{' '}
                   </Typography>
                   <TextField
@@ -102,16 +108,33 @@ const Login: FC = () => {
                     variant="outlined"
                     onChange={(e) => handleInputChange({ password: e.target.value })}
                   />
-                  <Button variant="contained" color="primary" type="submit">
-                    Submit
-                  </Button>
+                  <Box sx={{ position: 'relative' }} display="flex" justifyContent={'center'}>
+                    <Button
+                      disabled={buttonLoading}
+                      variant="contained"
+                      color="primary"
+                      type="submit">
+                      Submit
+                    </Button>
+                    {buttonLoading && (
+                      <CircularProgress
+                        size={24}
+                        sx={{
+                          position: 'absolute',
+                          top: '20%',
+                          left: '47%',
+                          color: 'blue'
+                        }}
+                      />
+                    )}
+                  </Box>
                 </Box>
               </form>
               <Accordion
                 css={css`
                   background-color: inherit;
-                `}
-                style={{ boxShadow: 'none' }}>
+                  box-shadow: none;
+                `}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -131,7 +154,6 @@ const Login: FC = () => {
           </Card>
         </Grid>
       </Grid>
-      <ToastContainer />
     </>
   );
 };

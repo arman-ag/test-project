@@ -1,19 +1,27 @@
 import axios from 'axios';
 
-const get = (url: string) => {
-  return axios({
-    method: 'get',
+const get = <A,>(url: string) => {
+  return axios.request<A>({
+    method: 'GET',
     url
   });
 };
-const post = <T,>(url: string, data: T) => {
-  return axios({
+const post = <T, D>(url: string, data: T) => {
+  return axios.request<T, D>({
     method: 'post',
+    url,
+    data
+  });
+};
+const put = <T, D>(url: string, data: T) => {
+  return axios.request<T, D>({
+    method: 'put',
     url,
     data
   });
 };
 export const api = {
   get,
-  post
+  post,
+  put
 };
